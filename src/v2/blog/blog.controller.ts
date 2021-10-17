@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Blog } from './dto/blog.model';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { BlogService } from './service/blog.service';
@@ -16,6 +16,7 @@ export class BlogController {
   }
 
   @Post('write')
+  @UsePipes(ValidationPipe)
   insertBlog(@Body() createBlogDto : CreateBlogDto):Blog{
     console.log("body : ", createBlogDto);
     return this.blogService.insertBlog(createBlogDto);

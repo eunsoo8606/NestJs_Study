@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Blog } from '../dto/blog.model';
 import { CreateBlogDto } from '../dto/create-blog.dto';
 
@@ -14,7 +14,7 @@ export class BlogService {
   insertBlog(createBlogDto : CreateBlogDto):Blog{
       const {title,content, memberSeq, mainImg,category,regpIp} = createBlogDto;
       
-      const blog: Blog = {
+      const blogs: Blog = {
         TITLE:title,
         CONTENT:content,
         MEMBER_SEQ:memberSeq,
@@ -23,11 +23,14 @@ export class BlogService {
         REGP_IP:regpIp,
         REGP_SEQ:String.fromCodePoint(memberSeq),
       }
-      return blog;
+      this.blog.push(blogs);
+      return blogs;
   }
 
   selectOne(blogSeq:number):Blog{
-    return this.blog.find((blog) => 1 === blogSeq);
+    var found = this.blog.find((blog) => 1 === blogSeq);
+    if(!found) throw new NotFoundException();
+    return found;
   }
   
 }
